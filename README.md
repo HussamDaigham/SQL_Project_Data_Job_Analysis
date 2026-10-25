@@ -112,7 +112,7 @@ WHERE
 GROUP BY
     skills.skills
 ORDER BY
-    demand_count desc
+    demand_count DESC
 LIMIT 5;
 ```
 | Skill    | Demand Count |
