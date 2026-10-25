@@ -41,5 +41,4 @@ Drawbacks include:
 1. Can become harder to read as the analysis grows.
 2. Less separation between analytical steps.
 3. Not suitable for every analytical problem.
-
 */

@@ -9,14 +9,14 @@ WITH top_paying_jobs AS( -- query used previously to determine the top 10 Data A
     SELECT
         job_id,
         job_title,
-        companies.name AS compnay_name,
+        companies.name AS company_name,
         salary_year_avg
     FROM
         job_postings_fact AS jobs
     LEFT JOIN company_dim AS companies ON jobs.company_id = companies.company_id
     WHERE
         job_title_short = 'Data Analyst' AND
-        job_location = 'Anywhere' AND
+        (job_location = 'Anywhere' OR job_work_from_home = TRUE) AND
         salary_year_avg IS NOT NULL
     ORDER BY
         salary_year_avg DESC

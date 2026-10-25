@@ -14,7 +14,7 @@ LEFT JOIN skills_job_dim ON jobs.job_id = skills_job_dim.job_id
 LEFT JOIN skills_dim AS skills ON skills.skill_id = skills_job_dim.skill_id
 WHERE
     job_title_short = 'Data Analyst' AND
-    (job_location LIKE '%New York%' OR job_work_from_home = TRUE)
+    (job_location = 'Anywhere' OR job_work_from_home = TRUE)
 GROUP BY
     skills.skills
 ORDER BY

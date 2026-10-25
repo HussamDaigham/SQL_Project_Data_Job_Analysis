@@ -71,5 +71,5 @@ Drawbacks include:
 2. Potentially less efficient.
 3. More code to maintain.
 
- I will rewrite this query more concisely in 5.2_optimal_skills.sql
+I will rewrite this query more concisely in 5.2_optimal_skills.sql
 */

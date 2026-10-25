@@ -7,7 +7,8 @@ Question: What are the top skills based on salary?
 
 SELECT
     skills.skills,
-    ROUND(AVG(salary_year_avg),0) AS avg_salary
+    ROUND(AVG(salary_year_avg),0) AS avg_salary,
+    COUNT(jobs.job_id) AS postings_count
 FROM
     job_postings_fact AS jobs
 LEFT JOIN skills_job_dim ON jobs.job_id = skills_job_dim.job_id

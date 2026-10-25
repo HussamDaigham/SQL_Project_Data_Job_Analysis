@@ -48,7 +48,7 @@ FROM
 LEFT JOIN company_dim AS companies ON jobs.company_id = companies.company_id
 WHERE
     job_title_short = 'Data Analyst' AND
-    job_location = 'Anywhere' AND
+    (job_location = 'Anywhere' OR job_work_from_home = TRUE) AND
     salary_year_avg IS NOT NULL
 ORDER BY
     salary_year_avg DESC
@@ -56,7 +56,7 @@ LIMIT 10;
 ```
 ![Top Paying Jobs](assets/1_Highest-paying%20jobs.png)
 
-**Bar graph visualizing the salary for the top 10 Data Analyst remote jobs; ChatGPT generated this graph from my SQL query results**
+**Bar graph visualizing the salary for the top 10 Data Analyst remote jobs; Mantys’s $650,000 posting is a clear outlier, at roughly 1.9 times the next-highest salary. The median salary across these 10 postings is $211,000.**
 
 ### 2. Skills for Top Paying Jobs
 
@@ -67,14 +67,14 @@ WITH top_paying_jobs AS(
     SELECT
         job_id,
         job_title,
-        companies.name AS compnay_name,
+        companies.name AS company_name,
         salary_year_avg
     FROM
         job_postings_fact AS jobs
     LEFT JOIN company_dim AS companies ON jobs.company_id = companies.company_id
     WHERE
         job_title_short = 'Data Analyst' AND
-        job_location = 'Anywhere' AND
+        (job_location = 'Anywhere' OR job_work_from_home = TRUE) AND
         salary_year_avg IS NOT NULL
     ORDER BY
         salary_year_avg DESC
@@ -93,7 +93,7 @@ ORDER BY
 ```
 ![Skills for the highest paying jobs](assets/2_Skill%20frequency%20among%20high-paying%20jobs.png)
 
-**Bar graph visualizing the top skills needed for Data Analyst jobs; ChatGPT generated this graph from my SQL query results**
+**Bar graph visualizing the top skills needed for the highest paying Data Analyst jobs; SQL appears in every posting, often alongside Python and Tableau, suggesting a common combination of querying, programming, and visualization.**
 ### 3. In-Demand Skills for Data Analysts
 
 This query helped identify the skills most frequently requested in job postings, directing focus to areas with high demand.
@@ -108,20 +108,16 @@ LEFT JOIN skills_job_dim ON jobs.job_id = skills_job_dim.job_id
 LEFT JOIN skills_dim AS skills ON skills.skill_id = skills_job_dim.skill_id
 WHERE
     job_title_short = 'Data Analyst' AND
-    (job_location LIKE '%New York%' OR job_work_from_home = TRUE)
+    (job_location = 'Anywhere' OR job_work_from_home = TRUE)
 GROUP BY
     skills.skills
 ORDER BY
     demand_count DESC
 LIMIT 5;
 ```
-| Skill    | Demand Count |
-|----------|-------------:|
-| SQL      | 9,046        |
-| Excel    | 5,939        |
-| Python   | 5,352        |
-| Tableau  | 4,744        |
-| Power BI | 3,072        |
+![Top demanded skills for data analysts](assets/3_Most-demanded%20data%20analyst%20skills.png)
+
+**Column graph visualizing the top demanded skills for data analyst jobs; SQL is the most-demanded skill, appearing in 7,291 postings—about 58% more than Excel. Excel and Python have similar demand, while Tableau leads Power BI among visualization tools. Together, these results highlight the importance of querying data, performing analysis, and communicating insights.**
 
 ### 4. Skills Based on Salary
 
@@ -130,7 +126,8 @@ Exploring the average salaries associated with different skills revealed which s
 ```sql
 SELECT
     skills.skills,
-    ROUND(AVG(salary_year_avg),0) AS avg_salary
+    ROUND(AVG(salary_year_avg),0) AS avg_salary,
+    COUNT(jobs.job_id) AS postings_count
 FROM
     job_postings_fact AS jobs
 LEFT JOIN skills_job_dim ON jobs.job_id = skills_job_dim.job_id
@@ -144,13 +141,9 @@ ORDER BY
     avg_salary DESC
 LIMIT 25;
 ```
-| Skill     | Average Annual Salary |
-|-----------|----------------------:|
-| SVN       | $400,000              |
-| Solidity  | $179,000              |
-| Couchbase | $160,515              |
-| DataRobot | $155,486              |
-| Golang    | $155,000              |
+![Highest average salaries by skill](assets/4_Highest%20average%20salaries%20by%20skill.png)
+
+**Combo chart showing the highest salaries based on skills and the number of job postings per skill; SVN’s $400,000 average comes from just one posting, making it a clear outlier and an unreliable indicator of typical pay. Airflow, Scala, and Kafka have lower averages of roughly $116,000–$130,000 but are supported by 40–71 postings each, providing a stronger basis for assessing salary patterns.**
 
 ### 5. Most Optimal Skills to Learn
 
@@ -234,13 +227,9 @@ ORDER BY
     demand_count DESC
 LIMIT 25;
 ```
-| Skill   | Demand Count | Average Annual Salary |
-|---------|-------------:|----------------------:|
-| Python  | 236          | $101,397              |
-| Tableau | 230          | $99,288               |
-| R       | 148          | $100,499              |
-| SAS     | 63           | $98,902               |
-| Looker  | 49           | $103,795              |
+![Optimal Skills](assets/5_Skill%20demand%20versus%20average%20salary.png)
+**Scatter plot showing the skill demand vs average salary for Data Analyst jobs; Python and Tableau stand out for demand, with 236 and 230 postings and average salaries of $101,397 and $99,288, respectively. Go offers the highest average salary but only 27 postings, while Snowflake and Azure also offer higher salaries with considerably fewer opportunities than Python or Tableau. This highlights a tradeoff between salary and demand**
+
 
 Each query not only served to answer a specific question but also to improve my understanding of SQL and database analysis. Through this project, I learned to leverage SQL's powerful data manipulation capabilities to derive meaningful insights from complex datasets.
 
