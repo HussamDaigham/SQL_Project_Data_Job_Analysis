@@ -231,6 +231,112 @@ LIMIT 25;
 ![Optimal Skills](assets/5_Skill%20demand%20versus%20average%20salary.png)
 **Scatter plot showing the skill demand vs average salary for Data Analyst jobs; Python and Tableau stand out for demand, with 236 and 230 postings and average salaries of $101,397 and $99,288, respectively. Go offers the highest average salary but only 27 postings, while Snowflake and Azure also offer higher salaries with considerably fewer opportunities than Python or Tableau. This highlights a tradeoff between salary and demand**
 
+### 6. Demand Change for Top Skills Across Each Quarter
+This query tracked demand for the top five Data Analyst skills across the four quarters of 2023, using each skill’s share of job postings to identify changes in demand while accounting for fluctuations in overall posting volume.
+```sql
+WITH top_demanded_skills AS(
+    SELECT
+        skills.skills
+    FROM
+        job_postings_fact AS jobs
+    INNER JOIN skills_job_dim ON jobs.job_id = skills_job_dim.job_id
+    INNER JOIN skills_dim AS skills ON skills.skill_id = skills_job_dim.skill_id
+    WHERE
+        job_title_short = 'Data Analyst'
+    GROUP BY
+        skills.skills
+    ORDER BY
+        COUNT(jobs.job_id) DESC
+    LIMIT 5
+),
+
+quarterly_job_totals AS(
+    SELECT
+        CONCAT('Q',EXTRACT(QUARTER FROM job_posted_date)) AS quarter,
+        COUNT(job_id) AS total_postings
+    FROM
+        job_postings_fact
+    WHERE
+        job_title_short = 'Data Analyst'
+    GROUP BY
+        quarter
+),
+
+quarterly_skill_demand AS (
+    SELECT
+        CONCAT('Q', EXTRACT(QUARTER FROM jobs.job_posted_date)) AS quarter_posted,
+        skills.skills,
+        COUNT(DISTINCT jobs.job_id) AS postings_count,
+        ROUND(COUNT(DISTINCT jobs.job_id) * 100.0 / qjt.total_postings,2) AS demand_percentage
+    FROM
+        job_postings_fact AS jobs
+    INNER JOIN skills_job_dim
+        ON jobs.job_id = skills_job_dim.job_id
+    INNER JOIN skills_dim AS skills
+        ON skills.skill_id = skills_job_dim.skill_id
+    INNER JOIN quarterly_job_totals AS qjt ON CONCAT('Q', EXTRACT(QUARTER FROM jobs.job_posted_date)) = qjt.quarter
+    WHERE
+        jobs.job_title_short = 'Data Analyst' AND
+        skills.skills IN (
+            SELECT
+                skills
+            FROM
+                top_demanded_skills)
+    GROUP BY
+        quarter_posted,
+        skills.skills,
+        qjt.total_postings
+)
+
+SELECT
+    quarter_posted,
+    skills,
+    postings_count,
+    demand_percentage,
+    LAG(demand_percentage) OVER (
+        PARTITION BY skills
+        ORDER BY quarter_posted
+    ) AS previous_quarter_demand,
+    demand_percentage - LAG(demand_percentage) OVER(
+        PARTITION BY skills
+        ORDER BY quarter_posted
+    ) AS demand_change_pp
+FROM
+    quarterly_skill_demand
+ORDER BY
+    quarter_posted,
+    skills;
+```
+
+![Change in demand](assets/6_demand_change.png)
+**Line chart showing the percentage change in demand for the top 5 most requested data analyst skills; SQL led throughout the year, but its share declined alongside Excel and Tableau. Power BI and Python finished above their Q1 shares, despite both slipping in Q4.**
+
+### 7. Salary Distribution Based on Work Arrangement
+This query tracks different parameters for remote vs non-remote jobs such as Min, Max, Average, and different percentiles
+```sql
+SELECT
+    CASE
+        WHEN job_work_from_home = TRUE THEN 'remote'
+        ELSE 'non-remote'
+    END AS work_arrangement,
+    ROUND(MIN(salary_year_avg),0) AS min_salary,
+    ROUND(MAX(salary_year_avg),0) AS max_salary,
+    ROUND(AVG(salary_year_avg),0) AS average_salary,
+    ROUND(PERCENTILE_CONT(0.25) WITHIN GROUP(
+        ORDER BY salary_year_avg)::NUMERIC,0) AS salary_25th,
+    ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP(
+        ORDER BY salary_year_avg)::NUMERIC,0) AS median_salary,
+    ROUND(PERCENTILE_CONT(0.75) WITHIN GROUP(
+        ORDER BY salary_year_avg)::NUMERIC,0) AS salary_75th   
+FROM
+    job_postings_fact
+WHERE
+    job_title_short = 'Data Analyst' AND
+    salary_year_avg IS NOT NULL
+GROUP BY
+    work_arrangement;
+```
+
 
 Each query not only served to answer a specific question but also to improve my understanding of SQL and database analysis. Through this project, I learned to leverage SQL's powerful data manipulation capabilities to derive meaningful insights from complex datasets.
 
