@@ -132,7 +132,7 @@ ORDER BY
     avg_salary DESC;
 ```
 
-### 5.A. Most Optimal Skills to Learn
+### 5. Most Optimal Skills to Learn
 
 Combining insights from demand and salary data, this query aimed to pinpoint skills that are both in high demand and have high salaries, offering a strategic focus for skill development.
 
