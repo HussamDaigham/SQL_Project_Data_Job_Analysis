@@ -54,13 +54,16 @@ ORDER BY
     salary_year_avg DESC
 LIMIT 10;
 ```
+![Top Paying Jobs](assets/1_Highest-paying%20jobs.png)
+
+**Bar graph visualizing the salary for the top 10 Data Analyst remote jobs; ChatGPT generated this graph from my SQL query results**
 
 ### 2. Skills for Top Paying Jobs
 
 To understand what skills are required for the top-paying jobs, I joined the job postings with the skills data, providing insights into what employers value for high-compensation roles.
 
 ```sql
-WITH top_paying_jobs AS( -- query used previously to determine the top 10 Data Analyst jobs (with some modifications)
+WITH top_paying_jobs AS(
     SELECT
         job_id,
         job_title,
@@ -88,7 +91,9 @@ INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 ORDER BY
     salary_year_avg DESC;
 ```
+![Skills for the highest paying jobs](assets/2_Skill%20frequency%20among%20high-paying%20jobs.png)
 
+**Bar graph visualizing the top skills needed for Data Analyst jobs; ChatGPT generated this graph from my SQL query results**
 ### 3. In-Demand Skills for Data Analysts
 
 This query helped identify the skills most frequently requested in job postings, directing focus to areas with high demand.
@@ -110,6 +115,13 @@ ORDER BY
     demand_count desc
 LIMIT 5;
 ```
+| Skill    | Demand Count |
+|----------|-------------:|
+| SQL      | 9,046        |
+| Excel    | 5,939        |
+| Python   | 5,352        |
+| Tableau  | 4,744        |
+| Power BI | 3,072        |
 
 ### 4. Skills Based on Salary
 
@@ -129,8 +141,16 @@ WHERE
 GROUP BY
     skills.skills
 ORDER BY
-    avg_salary DESC;
+    avg_salary DESC
+LIMIT 25;
 ```
+| Skill     | Average Annual Salary |
+|-----------|----------------------:|
+| SVN       | $400,000              |
+| Solidity  | $179,000              |
+| Couchbase | $160,515              |
+| DataRobot | $155,486              |
+| Golang    | $155,000              |
 
 ### 5. Most Optimal Skills to Learn
 
@@ -138,7 +158,7 @@ Combining insights from demand and salary data, this query aimed to pinpoint ski
 
 #### A. Using CTEs
 ```sql
-WITH top_demanded_skills AS( -- query used previously to determine the top demanded skills (with some modifications)
+WITH top_demanded_skills AS(
     SELECT
     skills.skill_id,
     skills.skills,
@@ -156,7 +176,7 @@ GROUP BY
     skills.skills
 ),
 
-top_paying_skills AS( -- query used previously to determine the top paying skills (with some modifications)
+top_paying_skills AS(
     SELECT
     skills.skill_id,
     skills.skills,
@@ -214,6 +234,13 @@ ORDER BY
     demand_count DESC
 LIMIT 25;
 ```
+| Skill   | Demand Count | Average Annual Salary |
+|---------|-------------:|----------------------:|
+| Python  | 236          | $101,397              |
+| Tableau | 230          | $99,288               |
+| R       | 148          | $100,499              |
+| SAS     | 63           | $98,902               |
+| Looker  | 49           | $103,795              |
 
 Each query not only served to answer a specific question but also to improve my understanding of SQL and database analysis. Through this project, I learned to leverage SQL's powerful data manipulation capabilities to derive meaningful insights from complex datasets.
 
