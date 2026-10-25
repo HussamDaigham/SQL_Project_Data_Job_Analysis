@@ -8,7 +8,6 @@ The motivation behind this project stemmed from my desire to understand the data
 
 The data for this analysis is from Luke Barousse’s SQL Course:
 
-https://www.lukebarousse.com/sql
 https://www.youtube.com/watch?v=7mz73uXD9DA
 
  This data includes details on job titles, salaries, locations, and required skills. 
