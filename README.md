@@ -26,6 +26,7 @@ In this project, I utilized a variety of tools to conduct my analysis:
 - **SQL** (Structured Query Language): Enabled me to interact with the database, extract insights, and answer my key questions through queries.
 - **PostgreSQL**: As the database management system, PostgreSQL allowed me to store, query, and manipulate the job posting data.
 - **Visual Studio Code:** This open-source administration and development platform helped me manage the database and execute SQL queries.
+- **Microsoft Excel:** Used to visualize SQL query results through charts, making salary comparisons and skill-demand patterns easier to understand.
 
 # The Analysis
 Each query for this project aimed at investigating specific aspects of the data analyst job market. Here’s how I approached each question:
