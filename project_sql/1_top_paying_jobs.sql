@@ -9,7 +9,7 @@ SELECT
     job_id,
     job_title,
     job_location,
-    companies.name AS compnay_name,
+    companies.name AS company_name,
     job_schedule_type,
     salary_year_avg,
     job_posted_date
