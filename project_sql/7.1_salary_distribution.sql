@@ -10,6 +10,7 @@ SELECT
         WHEN job_work_from_home = TRUE THEN 'remote'
         ELSE 'non-remote'
     END AS work_arrangement,
+    COUNT(job_id) AS job_count,
     ROUND(MIN(salary_year_avg),0) AS min_salary,
     ROUND(MAX(salary_year_avg),0) AS max_salary,
     ROUND(AVG(salary_year_avg),0) AS average_salary,

@@ -19,6 +19,9 @@ The questions I wanted to answer through my SQL queries were:
 3. What skills are most in demand for data analysts?
 4. Which skills are associated with higher salaries?
 5. What are the most optimal skills to learn for a data analyst looking to maximize job market value?
+6. How did demand for SQL, Python, and Power BI change across the four quarters?
+7. How do salary distributions differ between remote and on-site Data Analyst positions?
+8. Are jobs requiring both SQL and Python associated with higher salaries than jobs requiring only SQL?
 
 # Tools I Used
 In this project, I utilized a variety of tools to conduct my analysis:
@@ -55,9 +58,10 @@ ORDER BY
     salary_year_avg DESC
 LIMIT 10;
 ```
-![Top Paying Jobs](assets/1_Highest-paying%20jobs.png)
 
+![Top Paying Jobs](assets/1_Highest-paying%20jobs.png)
 **Bar graph visualizing the salary for the top 10 Data Analyst remote jobs; Mantys’s $650,000 posting is a clear outlier, at roughly 1.9 times the next-highest salary. The median salary across these 10 postings is $211,000.**
+
 
 ### 2. Skills for Top Paying Jobs
 
@@ -92,9 +96,11 @@ INNER JOIN skills_dim ON skills_job_dim.skill_id = skills_dim.skill_id
 ORDER BY
     salary_year_avg DESC;
 ```
-![Skills for the highest paying jobs](assets/2_Skill%20frequency%20among%20high-paying%20jobs.png)
 
+![Skills for the highest paying jobs](assets/2_Skill%20frequency%20among%20high-paying%20jobs.png)
 **Bar graph visualizing the top skills needed for the highest paying Data Analyst jobs; SQL appears in every posting, often alongside Python and Tableau, suggesting a common combination of querying, programming, and visualization.**
+
+
 ### 3. In-Demand Skills for Data Analysts
 
 This query helped identify the skills most frequently requested in job postings, directing focus to areas with high demand.
@@ -116,9 +122,10 @@ ORDER BY
     demand_count DESC
 LIMIT 5;
 ```
-![Top demanded skills for data analysts](assets/3_Most-demanded%20data%20analyst%20skills.png)
 
+![Top demanded skills for data analysts](assets/3_Most-demanded%20data%20analyst%20skills.png)
 **Column graph visualizing the top demanded skills for data analyst jobs; SQL is the most-demanded skill, appearing in 7,291 postings—about 58% more than Excel. Excel and Python have similar demand, while Tableau leads Power BI among visualization tools. Together, these results highlight the importance of querying data, performing analysis, and communicating insights.**
+
 
 ### 4. Skills Based on Salary
 
@@ -142,15 +149,17 @@ ORDER BY
     avg_salary DESC
 LIMIT 25;
 ```
-![Highest average salaries by skill](assets/4_Highest%20average%20salaries%20by%20skill.png)
 
+![Highest average salaries by skill](assets/4_Highest%20average%20salaries%20by%20skill.png)
 **Combo chart showing the highest salaries based on skills and the number of job postings per skill; SVN’s $400,000 average comes from just one posting, making it a clear outlier and an unreliable indicator of typical pay. Airflow, Scala, and Kafka have lower averages of roughly $116,000–$130,000 but are supported by 40–71 postings each, providing a stronger basis for assessing salary patterns.**
+
 
 ### 5. Most Optimal Skills to Learn
 
 Combining insights from demand and salary data, this query aimed to pinpoint skills that are both in high demand and have high salaries, offering a strategic focus for skill development.
 
 #### A. Using CTEs
+
 ```sql
 WITH top_demanded_skills AS(
     SELECT
@@ -203,7 +212,9 @@ ORDER BY
     demand_count DESC
 LIMIT 25;
 ```
-B. Without Using CTEs:
+
+#### B. Without Using CTEs:
+
 ```sql
 SELECT
     skills.skill_id,
@@ -228,11 +239,15 @@ ORDER BY
     demand_count DESC
 LIMIT 25;
 ```
+
 ![Optimal Skills](assets/5_Skill%20demand%20versus%20average%20salary.png)
 **Scatter plot showing the skill demand vs average salary for Data Analyst jobs; Python and Tableau stand out for demand, with 236 and 230 postings and average salaries of $101,397 and $99,288, respectively. Go offers the highest average salary but only 27 postings, while Snowflake and Azure also offer higher salaries with considerably fewer opportunities than Python or Tableau. This highlights a tradeoff between salary and demand**
 
+
 ### 6. Demand Change for Top Skills Across Each Quarter
+
 This query tracked demand for the top five Data Analyst skills across the four quarters of 2023, using each skill’s share of job postings to identify changes in demand while accounting for fluctuations in overall posting volume.
+
 ```sql
 WITH top_demanded_skills AS(
     SELECT
@@ -311,14 +326,19 @@ ORDER BY
 ![Change in demand](assets/6_demand_change.png)
 **Line chart showing the percentage change in demand for the top 5 most requested data analyst skills; SQL led throughout the year, but its share declined alongside Excel and Tableau. Power BI and Python finished above their Q1 shares, despite both slipping in Q4.**
 
+
 ### 7. Salary Distribution Based on Work Arrangement
-This query tracks different parameters for remote vs non-remote jobs such as Min, Max, Average, and different percentiles
+This query tracks different parameters for remote vs non-remote jobs such as Min, Max, Average, and different percentiles.
+
+#### A. Calculating the metrics:
+
 ```sql
 SELECT
     CASE
         WHEN job_work_from_home = TRUE THEN 'remote'
         ELSE 'non-remote'
     END AS work_arrangement,
+    COUNT(job_id) AS job_count,
     ROUND(MIN(salary_year_avg),0) AS min_salary,
     ROUND(MAX(salary_year_avg),0) AS max_salary,
     ROUND(AVG(salary_year_avg),0) AS average_salary,
@@ -337,6 +357,111 @@ GROUP BY
     work_arrangement;
 ```
 
+#### B. Calculating individual salaries to use for the box and whiskers:
+
+```sql
+SELECT
+    CASE
+        WHEN job_work_from_home = TRUE THEN 'remote'
+        ELSE 'non-remote'
+    END AS work_arrangement,
+    salary_year_avg
+FROM
+    job_postings_fact
+WHERE
+    job_title_short = 'Data Analyst' AND
+    salary_year_avg IS NOT NULL;
+```
+
+![Salary Distribution](assets/7_salary_distribution.png)
+**Box and Whiskers graph showing the salary distribution for remote vs non-remote jobs; The chart compares salary distributions for 4,859 non-remote and 604 remote Data Analyst job postings with reported annual salaries. The vertical axis is limited to $175,000 to improve visibility of the median and interquartile ranges. Higher salary outliers, reaching $400,000 for non-remote and $650,000 for remote positions, are excluded from the visible chart but retained in the underlying analysis.**
+
+
+### 7. Salary Distribution Based on Work Arrangement
+
+A query that calculates different metrics, such as, average, median, min, and max salaries, for data analyst job postings based on whether they require both sql and python or only sql.
+
+```sql
+WITH sql_only AS(
+    SELECT
+        jobs.job_id,
+        jobs.salary_year_avg
+    FROM
+        job_postings_fact AS jobs
+    WHERE
+        salary_year_avg IS NOT NULL AND
+        job_title_short = 'Data Analyst' AND
+        EXISTS(
+            SELECT *
+            FROM skills_job_dim AS sjd
+            INNER JOIN skills_dim AS skills ON sjd.skill_id = skills.skill_id
+            WHERE sjd.job_id = jobs.job_id
+            AND skills.skills = 'sql'
+        ) AND
+        NOT EXISTS(
+            SELECT *
+            FROM skills_job_dim AS sjd
+            INNER JOIN skills_dim AS skills2 ON sjd.skill_id = skills2.skill_id
+            WHERE sjd.job_id = jobs.job_id AND
+            skills2.skills = 'python'
+        )
+),
+
+sql_and_python AS(
+    SELECT
+        jobs.job_id,
+        jobs.salary_year_avg
+    FROM
+        job_postings_fact AS jobs
+        WHERE
+        salary_year_avg IS NOT NULL AND
+        job_title_short = 'Data Analyst' AND
+        EXISTS(
+            SELECT *
+            FROM skills_job_dim as sjd
+            INNER JOIN skills_dim AS skills2 ON sjd.skill_id = skills2.skill_id
+            WHERE sjd.job_id = jobs.job_id AND
+            skills2.skills = 'sql'
+        ) AND
+        EXISTS(
+            SELECT *
+            FROM skills_job_dim AS sjd
+            INNER JOIN skills_dim AS skills ON sjd.skill_id = skills.skill_id
+            WHERE sjd.job_id = jobs.job_id AND
+            skills.skills = 'python'
+        )
+)
+
+SELECT
+    skill_combo,
+    COUNT(*) AS job_count,
+    ROUND(AVG(salary_year_avg),0) AS average_salary,
+    ROUND(PERCENTILE_CONT(0.5) WITHIN GROUP(
+        ORDER BY salary_year_avg)) AS median_salary,
+    ROUND(MIN(salary_year_avg),0) AS min_salary,
+    ROUND(MAX(salary_year_avg),0) AS max_salary
+FROM(
+    SELECT
+        'sql only' AS skill_combo,
+        salary_year_avg
+    FROM
+        sql_only
+
+    UNION ALL
+
+    SELECT
+        'sql and python' AS skill_combo,
+        salary_year_avg
+    FROM
+        sql_and_python
+) AS combined_jobs
+GROUP BY
+    skill_combo;
+```
+
+![Skill Combination](assets/8_skill_combination.png)
+**Column graph showing average and median salaries for jobs requiring sql only vs both sql and python; Data Analyst postings mentioning both SQL and Python had an average salary of $101,159, approximately 10% higher than those mentioning SQL without Python ($91,994). Median salaries were also higher—$98,500 versus $90,000—showing that the difference extends beyond unusually high salaries.**
+
 
 Each query not only served to answer a specific question but also to improve my understanding of SQL and database analysis. Through this project, I learned to leverage SQL's powerful data manipulation capabilities to derive meaningful insights from complex datasets.
 
@@ -349,5 +474,6 @@ Throughout this project, I strengthened my SQL skills and gained practical exper
 - **Complex Query Construction:** Built advanced SQL queries using Common Table Expressions (CTEs) with `WITH` clauses to organize complex logic into smaller, more manageable components.
 - **Query Optimization:** Explored ways to improve query efficiency and readability by reducing redundant code and comparing different approaches to achieving the same results.
 - **Analytical Thinking:** Developed my ability to translate real-world business questions into SQL queries, analyze the results, and draw actionable insights from the data.
+
 # Conclusions
 This project enhanced my SQL skills and provided valuable insights into the data analyst job market. The findings from the analysis serve as a guide to prioritizing skill development and job search efforts. Aspiring data analysts can better position themselves in a competitive job market by focusing on high-demand, high-salary skills. This exploration highlights the importance of continuous learning and adaptation to emerging trends in the field of data analytics.
