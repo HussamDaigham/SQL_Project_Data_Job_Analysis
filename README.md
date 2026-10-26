@@ -377,7 +377,7 @@ WHERE
 **Box and Whiskers graph showing the salary distribution for remote vs non-remote jobs; The chart compares salary distributions for 4,859 non-remote and 604 remote Data Analyst job postings with reported annual salaries. The vertical axis is limited to $175,000 to improve visibility of the median and interquartile ranges. Higher salary outliers, reaching $400,000 for non-remote and $650,000 for remote positions, are excluded from the visible chart but retained in the underlying analysis.**
 
 
-### 7. Salary Distribution Based on Work Arrangement
+### 8. Salary Based on Skill Combinations
 
 A query that calculates different metrics, such as, average, median, min, and max salaries, for data analyst job postings based on whether they require both sql and python or only sql.
 
@@ -469,11 +469,15 @@ Each query not only served to answer a specific question but also to improve my 
 Throughout this project, I strengthened my SQL skills and gained practical experience in several key areas:
 
 - **Table Joins and Relationships:** Strengthened my understanding of relational databases by using `INNER JOIN` and `LEFT JOIN` to combine data across multiple tables.
-- **Data Filtering and Sorting:** Applied `WHERE`, `HAVING`, and `ORDER BY` clauses to filter datasets, refine query results, and identify meaningful trends.
-- **Data Aggregation:** Utilized `GROUP BY` and aggregate functions such as `COUNT()` and `AVG()` to summarize data and uncover valuable insights.
-- **Complex Query Construction:** Built advanced SQL queries using Common Table Expressions (CTEs) with `WITH` clauses to organize complex logic into smaller, more manageable components.
-- **Query Optimization:** Explored ways to improve query efficiency and readability by reducing redundant code and comparing different approaches to achieving the same results.
-- **Analytical Thinking:** Developed my ability to translate real-world business questions into SQL queries, analyze the results, and draw actionable insights from the data.
+- **Data Filtering and Sorting:** Applied `WHERE`, `HAVING`, `IN`, and `ORDER BY` to filter datasets, refine query results, and identify meaningful trends.
+- **Data Aggregation:** Utilized `GROUP BY` and aggregate functions such as `COUNT()`, `AVG()`, `MIN()`, and `MAX()` to summarize job market data and uncover valuable insights.
+- **Advanced Query Construction:** Built complex SQL queries using Common Table Expressions (CTEs), subqueries, and `EXISTS` / `NOT EXISTS` operators to organize query logic and evaluate specific conditions.
+- **Window Functions and Time-Based Analysis:** Used `LAG()` with `OVER()`, `PARTITION BY`, and `ORDER BY` to analyze quarterly skill demand and calculate quarter-over-quarter changes. Applied `EXTRACT()` and `CONCAT()` to organize and label time-based results.
+- **Statistical Analysis:** Applied `PERCENTILE_CONT()` to calculate median salaries and quartiles, helping identify salary distributions, variability, and potential outliers.
+- **Conditional Logic:** Used `CASE` expressions to categorize job postings based on characteristics such as remote work availability, allowing for comparisons between different groups.
+- **Combining Query Results:** Used `UNION ALL` to combine results from separate analyses into a single dataset for comparison.
+- **Query Organization and Readability:** Explored ways to improve query readability and efficiency by reducing redundant code, organizing complex logic with CTEs, and comparing alternative query approaches.
+- **Analytical Thinking:** Developed my ability to translate real-world questions into SQL queries, interpret statistical results, recognize potential data limitations, and draw meaningful conclusions from the data.
 
 # Conclusions
 This project enhanced my SQL skills and provided valuable insights into the data analyst job market. The findings from the analysis serve as a guide to prioritizing skill development and job search efforts. Aspiring data analysts can better position themselves in a competitive job market by focusing on high-demand, high-salary skills. This exploration highlights the importance of continuous learning and adaptation to emerging trends in the field of data analytics.
