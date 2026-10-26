@@ -1,16 +1,12 @@
 # Introduction
-Welcome to my SQL Portfolio Project, where I delve into the data job market with a focus on data analyst roles. This project is a personal exploration into identifying the top-paying jobs, in-demand skills, and the intersection of high demand with high salary in the field of data analytics.
+Welcome to my SQL Portfolio Project, where I delve into the data job market with a focus on data analyst roles. This project is a personal exploration into identifying the top-paying jobs, in-demand skills, and the intersection of high demand with high salary in the field of data analytics. This project was initially developed as part of [Luke Barousse's SQL for Data Analytics course](https://www.lukebarousse.com/sql). Building on the original five analyses, I developed three additional investigations exploring quarterly changes in technical skill demand, salary distributions across work arrangements, and the salary impact of combining SQL and Python skills. These additional analyses allowed me to apply more advanced SQL techniques and explore new questions beyond the course material.
 
 Check out my SQL queries here: [project_sql folder](/project_sql/)
 
 # Background
 The motivation behind this project stemmed from my desire to understand the data analyst job market better. I aimed to discover which skills are paid the most and in demand, making my job search more targeted and effective. 
 
-The data for this analysis is from Luke Barousse’s SQL Course:
-
-https://www.youtube.com/watch?v=7mz73uXD9DA
-
- This data includes details on job titles, salaries, locations, and required skills. 
+The data for this analysis is from Luke Barousse’s SQL Course. This data includes details on job titles, salaries, locations, and required skills. 
 
 The questions I wanted to answer through my SQL queries were:
 
@@ -19,7 +15,7 @@ The questions I wanted to answer through my SQL queries were:
 3. What skills are most in demand for data analysts?
 4. Which skills are associated with higher salaries?
 5. What are the most optimal skills to learn for a data analyst looking to maximize job market value?
-6. How did demand for SQL, Python, and Power BI change across the four quarters?
+6. How did demand for the top 5 skills change across the four quarters?
 7. How do salary distributions differ between remote and on-site Data Analyst positions?
 8. Are jobs requiring both SQL and Python associated with higher salaries than jobs requiring only SQL?
 
@@ -465,6 +461,37 @@ GROUP BY
 
 Each query not only served to answer a specific question but also to improve my understanding of SQL and database analysis. Through this project, I learned to leverage SQL's powerful data manipulation capabilities to derive meaningful insights from complex datasets.
 
+# Final Analysis
+
+Analysis of 2023 Data Analyst job postings revealed several key findings about salary trends, technical skill demand, and the relationship between skill requirements and compensation.
+
+### 1. Top-Paying Data Analyst Jobs
+The highest-paying remote Data Analyst position offered $650,000, a significant outlier compared to the other top-paying roles. The median salary among the top 10 positions was $211,000, highlighting the earning potential of specialized and senior-level opportunities.
+
+### 2. Skills Required for Top-Paying Jobs
+SQL appeared in all eight top-paying positions with listed skills, while Python and Tableau were also frequently requested. These findings suggest that combining database querying, programming, and visualization skills is valuable for pursuing higher-paying opportunities.
+
+### 3. Most In-Demand Skills
+SQL was the most requested technical skill, appearing in 7,291 remote Data Analyst job postings—approximately 58% more than Excel. Python, Tableau, and Power BI were also among the top five, demonstrating the importance of combining analytical and visualization capabilities.
+
+### 4. Highest-Paying Skills
+Specialized technologies were associated with some of the highest average salaries, but these figures were often influenced by small sample sizes, such as SVN's $400,000 average from a single posting. Skills like Airflow, Scala, and Kafka demonstrated more substantial sample sizes alongside competitive salaries, making their results more informative.
+
+### 5. Most Optimal Skills to Learn
+Python and Tableau offered particularly strong combinations of demand and compensation, with 236 and 230 postings and average salaries of $101,397 and $99,288, respectively. Although specialized skills like Go offered higher average salaries, their lower demand suggests a tradeoff between compensation and the number of available opportunities.
+
+### 6. Quarterly Changes in Skill Demand
+SQL remained the most requested technical skill throughout 2023, although its share of Data Analyst job postings declined alongside Excel and Tableau. Python and Power BI finished the year with higher demand shares than in Q1, suggesting modest shifts in employer skill requirements despite fluctuations in overall hiring activity.
+
+### 7. Remote vs. Non-Remote Salary Distributions
+The analysis compared 604 remote and 4,859 non-remote Data Analyst positions with reported salaries, revealing differences in compensation distributions and extreme salary outliers. Remote positions reached a maximum salary of $650,000 compared to $400,000 for non-remote positions, emphasizing the importance of using medians and quartiles rather than relying exclusively on averages.
+
+### 8. Salary Impact of Combining SQL and Python
+Data Analyst positions requiring both SQL and Python had an average salary of $101,159, approximately 10% higher than positions requiring SQL without Python ($91,994). Median salaries were also higher ($98,500 versus $90,000), suggesting that combining these skills is associated with a meaningful compensation advantage.
+
+### Overall Conclusion
+The findings consistently highlight SQL, Python, and data visualization tools as valuable skills for aspiring Data Analysts. While specialized technologies can be associated with higher salaries, developing a strong foundation in widely requested skills such as SQL and Python offers a practical balance between career opportunities, employer demand, and earning potential.
+
 # What I Learned
 Throughout this project, I strengthened my SQL skills and gained practical experience in several key areas:
 
@@ -480,4 +507,4 @@ Throughout this project, I strengthened my SQL skills and gained practical exper
 - **Analytical Thinking:** Developed my ability to translate real-world questions into SQL queries, interpret statistical results, recognize potential data limitations, and draw meaningful conclusions from the data.
 
 # Conclusions
-This project enhanced my SQL skills and provided valuable insights into the data analyst job market. The findings from the analysis serve as a guide to prioritizing skill development and job search efforts. Aspiring data analysts can better position themselves in a competitive job market by focusing on high-demand, high-salary skills. This exploration highlights the importance of continuous learning and adaptation to emerging trends in the field of data analytics.
+This project helped me improve my SQL skills while gaining a better understanding of the Data Analyst job market. Through the analysis, I identified trends in job demand, salaries, and technical skills that can help aspiring Data Analysts make informed career decisions. The findings also highlight the importance of focusing on in-demand skills and continuously learning to stay competitive in the field.
