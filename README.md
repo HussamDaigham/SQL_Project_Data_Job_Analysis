@@ -16,8 +16,8 @@ The questions I wanted to answer through my SQL queries were:
 4. Which skills are associated with higher salaries?
 5. What are the Best Skills Based on Demand and Salary"?
 6. How did demand for the top 5 skills change across the four quarters?
-7. How do salary distributions differ between remote and on-site Data Analyst positions?
-8. Are jobs requiring both SQL and Python associated with higher salaries than jobs requiring only SQL?
+7. How do salary distributions differ between remote and non-remote Data Analyst positions?
+8. Are jobs requiring both SQL and Python associated with higher salaries than jobs requiring SQL without Python?
 
 # Tools I Used
 In this project, I utilized a variety of tools to conduct my analysis:
@@ -375,7 +375,7 @@ WHERE
 
 ### 8. Salary Based on Skill Combinations
 
-A query that calculates different metrics, such as, average, median, min, and max salaries, for data analyst job postings based on whether they require both sql and python or only sql.
+A query that calculates different metrics, such as, average, median, min, and max salaries, for data analyst job postings based on whether they require both sql and python or sql without python.
 
 ```sql
 WITH sql_no_python AS(

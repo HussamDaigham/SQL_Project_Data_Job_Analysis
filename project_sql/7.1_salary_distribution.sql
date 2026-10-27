@@ -1,8 +1,8 @@
 /*
-Question: How do salary distributions differ between remote and on-site Data Analyst positions?
-- Compares annual salary distributions for remote and on-site Data Analyst job postings.
+Question: How do salary distributions differ between remote and non-remote Data Analyst positions?
+- Compares annual salary distributions for remote and non-remote Data Analyst job postings.
 - Examines average, median, and salary ranges to identify differences in compensation between work arrangements.
-- Why? It helps job seekers evaluate how remote and on-site opportunities compare financially, allowing them to make more informed decisions about job preferences and salary expectations.
+- Why? It helps job seekers evaluate how remote and non-remote opportunities compare financially, allowing them to make more informed decisions about job preferences and salary expectations.
 */
 
 SELECT

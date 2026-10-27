@@ -1,5 +1,5 @@
 /*
-Question: Are Data Analyst jobs requiring both SQL and Python associated with higher salaries than jobs requiring only SQL?
+Question: Are Data Analyst jobs requiring both SQL and Python associated with higher salaries than jobs requiring SQL without python?
 - Compares annual salaries for Data Analyst job postings requiring both SQL and Python against those requiring SQL without Python.
 - Analyzes average and median salaries to identify potential salary differences between the two skill combinations.
 - Examines job posting counts to compare the demand for each skill combination among postings with reported annual salaries.
