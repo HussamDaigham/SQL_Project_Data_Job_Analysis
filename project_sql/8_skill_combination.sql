@@ -6,7 +6,7 @@ Question: Are Data Analyst jobs requiring both SQL and Python associated with hi
 - Why? It helps aspiring Data Analysts understand whether learning Python alongside SQL is associated with higher compensation, allowing them to make more informed decisions about which technical skills to develop.
 */
 
-WITH sql_only AS(
+WITH sql_no_python AS(
     SELECT
         jobs.job_id,
         jobs.salary_year_avg
@@ -66,15 +66,15 @@ SELECT
     ROUND(MAX(salary_year_avg),0) AS max_salary
 FROM(
     SELECT
-        'sql only' AS skill_combo,
+        'sql without python' AS skill_combo,
         salary_year_avg
     FROM
-        sql_only
+        sql_no_python
 
     UNION ALL
 
     SELECT
-        'sql and python' AS skill_combo,
+        'sql with python' AS skill_combo,
         salary_year_avg
     FROM
         sql_and_python
